@@ -37,11 +37,11 @@ public class SignupController {
         List<String> emailErrorMessages = (List) messages[0];
         List<String> passwordErrorMessages = (List) messages[1];
         if (emailErrorMessages.size()>0) {
-            model.addAttribute("emailError", emailErrorMessages.get(0));
+            model.addAttribute("emailError", "Error: " + emailErrorMessages.get(0));
             return signupPage;
         }
         if (passwordErrorMessages.size()>0) {
-            model.addAttribute("passwordError", passwordErrorMessages.get(0));
+            model.addAttribute("passwordError", "Error: " + passwordErrorMessages.get(0));
             return signupPage;
         }
         return "redirect:/login?signup=true";

@@ -8,9 +8,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
   <head>
-    <title>$Title$</title>
+    <title>Ak Bars Test Task</title>
+    <meta http-equiv="refresh" content="1; URL=${pageContext.request.contextPath}/login">
   </head>
   <body>
-  $END$
+  Redirecting...
   </body>
 </html>

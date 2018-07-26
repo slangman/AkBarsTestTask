@@ -11,6 +11,8 @@
     <title>Dashboard</title>
 </head>
 <body>
-
+     <h2>Welcome to dashboard</h2>
+    Signed in as ${sessionScope.get('entered_email')}
+    <a href="${pageContext.request.contextPath}/editProfile">Edit profile</a>
 </body>
 </html>

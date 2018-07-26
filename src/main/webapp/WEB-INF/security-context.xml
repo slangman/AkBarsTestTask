@@ -41,13 +41,20 @@
     <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
     <authentication-manager alias="authenticationManager">
-        <authentication-provider>
+
+        <!--<authentication-provider>
+            <user-service>
+                <user name="admin" password="123" authorities="ROLE_USER" />
+            </user-service>
+        </authentication-provider>-->
+
+       <authentication-provider>
             <password-encoder ref="encoder"/>
             <jdbc-user-service data-source-ref="dataSource"
                                users-by-username-query=
-                                       "SELECT login, passwordHash, enabled FROM user WHERE login = ?"
+                                       "SELECT email, passwordHash, enabled FROM user WHERE email = ?"
                                authorities-by-username-query=
-                                       "SELECT login, 'ROLE_USER' FROM user WHERE login = ?"/>
+                                       "SELECT email, 'ROLE_USER' FROM user WHERE email = ?"/>
         </authentication-provider>
     </authentication-manager>
 

@@ -3,17 +3,24 @@ package com.hustleind.service;
 import com.hustleind.User;
 import com.hustleind.UserDao;
 import org.apache.commons.validator.EmailValidator;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("userServiceImpl")
+@Transactional
 public class UserServiceImpl implements UserService {
+
+    private static Logger logger = Logger.getLogger(UserServiceImpl.class);
 
     private UserDao userDao;
 
@@ -64,18 +71,32 @@ public class UserServiceImpl implements UserService {
             return result;
         }
         if (checkPasswordStrength(password) == false || checkPasswordLength(password) == false) {
-            passwordErrorMessages.add("Password must be from 6 to 20 characters containing both letters and numbers.");
+            logger.warn("Unable to create user. Password is out of allowed length or too weak.");
+            passwordErrorMessages.add("Password must be from 6 to 20 characters containing lowercase, uppercase letters and numbers.");
             return result;
         }
         if (checkEmailValidity(email) == false) {
+            logger.warn("Unable to create user. Email address is incorrect.");
             emailErrorMessages.add("Email address is not valid.");
+            return result;
+        }
+        if (userDao.getUserByEmail(email)!=null) {
+            logger.warn("Unable to create user. User with email " + email + " already exists.");
+            emailErrorMessages.add("User with that email already exists");
             return result;
         }
         User user = new User();
         user.setEmail(email);
         user.setPasswordHash(CryptService.encrypt(password));
+        user.setEnabled(1);
         userDao.addUser(user);
+        logger.info("User with email " + email + " successfully created");
         return result;
+    }
+
+    public Object[] updateUser(MultiValueMap<String, String> incParam) {
+        Object[] result = new Object[3];
+        return null;
     }
 
 
@@ -102,7 +123,22 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean checkPasswordLength(String password) {
-        return (password.length() > 6 && password.length() < 20);
+        return (password.length() >= 6 && password.length() <= 20);
+    }
+
+    private boolean checkURLValidity(String url) {
+        try {
+            HttpURLConnection.setFollowRedirects(false);
+            // note : you may also need
+            //        HttpURLConnection.setInstanceFollowRedirects(false)
+            HttpURLConnection con =
+                    (HttpURLConnection) new URL(url).openConnection();
+            con.setRequestMethod("HEAD");
+            return(con.getResponseCode() == HttpURLConnection.HTTP_OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /*private boolean checkNameValidity(String name) {
