@@ -16,7 +16,7 @@
     <c:set var="currentUser" value="${requestScope.get('currentUser')}"/>
     <form action="${pageContext.request.contextPath}/editProfile" method="post">
         <label for="email">Email:</label>
-        <input type="text" name="email" id="email" placeholder="Email" value="${currentUser.getEmail()}" disabled>
+        <input type="text" name="email" id="email" placeholder="Email" value="${currentUser.getEmail()}" readonly>
         <h3>Edit password</h3>
         <label for="newPassword">New password</label>
         <input type="password" name="newPassword" id="newPassword" placeholder="New password"><br>
@@ -33,7 +33,33 @@
                placeholder="+7 123-456-7890"
                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"--%>
         <label for="userPicURL">Userpic URL</label>
-        <input type="url" name="userPicURL" id="userPicURL" placeholder="Userpic URL" value="${currentUser.getUserPicURL()}">
+        <input type="url" name="userPicURL" id="userPicURL" placeholder="Userpic URL" value="${currentUser.getUserPicURL()}"><br>
+        <button type = "submit">Save</button>
     </form>
+    <div>
+        Message box<br>
+        <c:set var="passwordErrors" value="${requestScope.get('passwordErrors')}"/>
+        <c:if test="${passwordErrors!=null}">
+            <c:forEach items="${passwordErrors}" var="passwordError">
+                ${passwordError}<br>
+            </c:forEach>
+        </c:if>
+        <c:set var="nameErrors" value="${requestScope.get('nameErrors')}"/>
+        <c:if test="${nameErrors!=null}">
+            <c:forEach items="${nameErrors}" var="nameError">
+                ${nameError}<br>
+            </c:forEach>
+        </c:if>
+        <c:set var="userPicErrors" value="${requestScope.get('userPicErrors')}"/>
+        <c:if test="${userPicErrors!=null}">
+            <c:forEach items="${userPicErrors}" var="userPicError">
+                ${userPicError}<br>
+            </c:forEach>
+        </c:if>
+        <c:set var="updateSuccessfull" value="${requestScope.get('updateSuccessfull')}"/>
+        <c:if test="${updateSuccessfull!=null}">
+            ${updateSuccessfull}
+        </c:if>
+    </div>
 </body>
 </html>
