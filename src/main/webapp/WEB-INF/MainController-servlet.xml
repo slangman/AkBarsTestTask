@@ -10,7 +10,11 @@
 
     <context:annotation-config/>
     <context:component-scan base-package="com.hustleind.controller"/>
+    <context:component-scan base-package="com.hustleind.config" />
 
+    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
+    <mvc:resources mapping="/swagger-ui.html" location="classpath:/META-INF/resources/swagger-ui.html"/>
+    <mvc:annotation-driven />
 
     <mvc:interceptors>
         <mvc:interceptor>

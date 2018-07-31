@@ -1,6 +1,7 @@
 package com.hustleind.controller;
 
 import com.hustleind.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.List;
 
 @Controller
+@ApiOperation(value = "Signup page")
 @RequestMapping("/signup")
 public class SignupController {
 
@@ -38,12 +40,12 @@ public class SignupController {
         List<String> passwordErrorMessages = (List) messages[1];
         if (emailErrorMessages.size() > 0) {
             model.addAttribute("emailError", "Error: " + emailErrorMessages.get(0));
-            fileLogger.info("Someone tries to sign up with no result because of email error.");
+            fileLogger.info("Someone tried to sign up with no result because of email error.");
             return signupPage;
         }
         if (passwordErrorMessages.size() > 0) {
             model.addAttribute("passwordError", "Error: " + passwordErrorMessages.get(0));
-            fileLogger.info("Someone tries to sign up with no result because of password error.");
+            fileLogger.info("Someone tried to sign up with no result because of password error.");
             return signupPage;
         }
         return "redirect:/login?signup=true";
