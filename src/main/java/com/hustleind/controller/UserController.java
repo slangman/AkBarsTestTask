@@ -2,6 +2,7 @@ package com.hustleind.controller;
 
 import com.hustleind.User;
 import com.hustleind.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @ApiOperation(value = "Edit profile page")
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String getEditUserPage(HttpSession session, Model model) {
         User currentUser = userService.getActiveUser();
@@ -33,6 +35,7 @@ public class UserController {
         return "editProfile";
     }
 
+    @ApiOperation(value = "Edit profile page")
     @RequestMapping(value="/editProfile", method=RequestMethod.POST)
     public String editProfile(@RequestBody MultiValueMap<String, String> incParam,
                               HttpSession session,
@@ -44,23 +47,23 @@ public class UserController {
         List<String> userPicErrorMessages = (List) messages[2];
         if (passwordErrorMessages.size()>0) {
             model.addAttribute("passwordErrors", passwordErrorMessages);
-            fileLogger.info("User " + currentUser.getEmail() + " tries to update profile with no result because of password errors.");
+            fileLogger.info("User " + currentUser.getEmail() + " tried to update profile with no result because of password errors.");
             return "editProfile";
         }
         if (nameErrorMessages.size()>0) {
             model.addAttribute("nameErrors", nameErrorMessages);
-            fileLogger.info("User " + currentUser.getEmail() + " tries to update profile with no result because of name errors.");
+            fileLogger.info("User " + currentUser.getEmail() + " tried to update profile with no result because of name errors.");
             return "editProfile";
         }
         if (userPicErrorMessages.size()>0) {
             model.addAttribute("userPicErrors", userPicErrorMessages);
-            fileLogger.info("User " + currentUser.getEmail() + " tries to update profile with no result because of userPic errors.");
+            fileLogger.info("User " + currentUser.getEmail() + " tried to update profile with no result because of userPic errors.");
             return "editProfile";
         }
         //User currentUser = userService.getActiveUser();
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("updateSuccessfull", "User updated successfully.");
-        fileLogger.info("User " + currentUser.getEmail() + " updates profile data.");
+        fileLogger.info("User " + currentUser.getEmail() + " updated profile data.");
         return "editProfile";
     }
 
