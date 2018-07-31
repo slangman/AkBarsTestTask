@@ -25,7 +25,7 @@ public class LoginController {
     @ApiOperation(value = "Login page")
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
-        fileLogger.info("Someone requested login page");
+        fileLogger.info("Someone opened login page");
         return "loginPage";
     }
 
@@ -39,8 +39,8 @@ public class LoginController {
     @ApiOperation(value = "Logout")
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpSession session) {
+        fileLogger.info("User " + userService.getActiveUser().getEmail() + " logged out.");
         if (session.getAttribute("entered_user_id") != null) {
-            fileLogger.info("User " + userService.getActiveUser().getEmail() + " logged out.");
             session.removeAttribute("entered_email");
             session.removeAttribute("entered_role");
             session.removeAttribute("entered_user_id");

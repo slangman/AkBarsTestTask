@@ -12,7 +12,8 @@
 </head>
 <body>
 <h2>Welcome to dashboard</h2>
-Signed in as ${sessionScope.get('entered_email')}
-<a href="${pageContext.request.contextPath}/profile">Edit profile</a>
+Signed in<br>
+<a href="${pageContext.request.contextPath}/profile">Edit profile</a><br>
+<a href="${pageContext.request.contextPath}/logout">Logout</a>
 </body>
 </html>

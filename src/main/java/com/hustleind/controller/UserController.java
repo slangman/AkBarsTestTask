@@ -31,7 +31,7 @@ public class UserController {
     public String getEditUserPage(HttpSession session, Model model) {
         User currentUser = userService.getActiveUser();
         model.addAttribute("currentUser", currentUser);
-        fileLogger.info("User " + currentUser.getEmail() + " goes to profile edit page.");
+        fileLogger.info("User " + currentUser.getEmail() + " opened profile edit page.");
         return "editProfile";
     }
 

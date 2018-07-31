@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: AttenCHUN
-  Date: 25.07.2018
-  Time: 20:59
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -18,5 +12,11 @@
     <button type="submit">Log in</button>
 </form>
 <a href="${pageContext.request.contextPath}/signup">Sign Up</a>
+<div>
+    <c:set var="signUpSuccess" value="${requestScope.get('signUpSuccess')}"/>
+    <c:if test="${signUpSuccess!=null}">
+        ${signUpSuccess}
+    </c:if>
+</div>
 </body>
 </html>

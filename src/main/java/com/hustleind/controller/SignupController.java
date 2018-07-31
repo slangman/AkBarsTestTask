@@ -48,6 +48,7 @@ public class SignupController {
             fileLogger.info("Someone tried to sign up with no result because of password error.");
             return signupPage;
         }
+        model.addAttribute("signUpSuccess", "User successfully signed up.");
         return "redirect:/login?signup=true";
     }
 }
