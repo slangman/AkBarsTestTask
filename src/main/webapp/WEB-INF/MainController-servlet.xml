@@ -11,9 +11,6 @@
     <context:annotation-config/>
     <context:component-scan base-package="com.hustleind.controller"/>
 
-    <mvc:resources mapping="swagger-ui.html" location="/META-INF/resources/"/>
-    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
-    <bean class="com.concretepage.config.SwaggerConfig"/>
 
     <mvc:interceptors>
         <mvc:interceptor>
