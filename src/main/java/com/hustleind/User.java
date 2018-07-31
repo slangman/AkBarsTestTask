@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name="user")
+@Table(name = "user")
 @NoArgsConstructor
 @EqualsAndHashCode
 public class User {

@@ -2,6 +2,7 @@ package com.hustleind.controller.filter;
 
 import com.hustleind.User;
 import com.hustleind.service.UserService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -14,11 +15,11 @@ import javax.servlet.http.HttpSession;
 public class StartHandlerInterceptor implements HandlerInterceptor {
     private UserService userService;
 
+
     @Autowired
     public StartHandlerInterceptor(UserService userService) {
         this.userService = userService;
     }
-
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

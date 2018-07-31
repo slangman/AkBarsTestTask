@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/signup")
 public class SignupController {
 
-    private static Logger logger = Logger.getLogger(SignupController.class);
+    private static Logger fileLogger = Logger.getLogger("file");
 
     private String signupPage = "signup";
     private UserService userService;
@@ -26,22 +26,24 @@ public class SignupController {
         this.userService = userService;
     }
 
-    @RequestMapping(method= RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public String pageHandler() {
         return signupPage;
     }
 
-    @RequestMapping(method=RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public String signupFormHandler(@RequestBody MultiValueMap<String, String> incParam, Model model) {
         Object[] messages = userService.addUserByParams(incParam);
         List<String> emailErrorMessages = (List) messages[0];
         List<String> passwordErrorMessages = (List) messages[1];
-        if (emailErrorMessages.size()>0) {
+        if (emailErrorMessages.size() > 0) {
             model.addAttribute("emailError", "Error: " + emailErrorMessages.get(0));
+            fileLogger.info("Someone tries to sign up with no result because of email error.");
             return signupPage;
         }
-        if (passwordErrorMessages.size()>0) {
+        if (passwordErrorMessages.size() > 0) {
             model.addAttribute("passwordError", "Error: " + passwordErrorMessages.get(0));
+            fileLogger.info("Someone tries to sign up with no result because of password error.");
             return signupPage;
         }
         return "redirect:/login?signup=true";

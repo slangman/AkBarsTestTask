@@ -20,7 +20,7 @@ import java.util.List;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private static Logger logger = Logger.getLogger(UserServiceImpl.class);
+    private static Logger logger = Logger.getLogger("stdout");
 
     private UserDao userDao;
 
@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
     public Object[] addUserByParams(MultiValueMap<String, String> incParam) {
         Object[] result = new Object[3];
         if (incParam == null || incParam.isEmpty()) {
+            logger.error("incParam is null or empty. User data fields are not presented.");
             return result;
         }
         List<String> emailErrorMessages = new ArrayList<>();
@@ -91,7 +92,6 @@ public class UserServiceImpl implements UserService {
         user.setPasswordHash(CryptService.encrypt(password));
         user.setEnabled(1);
         userDao.addUser(user);
-        logger.info("User with email " + email + " successfully created");
         return result;
     }
 
@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
     public Object[] editUser(MultiValueMap<String, String> incParam) {
         Object[] result = new Object[3];
         if (incParam == null || incParam.isEmpty()) {
-            logger.error("incParam is null. User data fields are not presented.");
+            logger.error("incParam is null or empty. User data fields are not presented.");
             return result;
         }
         List<String> passwordErrorMessage = new ArrayList<>();
@@ -125,6 +125,7 @@ public class UserServiceImpl implements UserService {
             }
             if (checkPasswordLength(newPassword) == false || checkPasswordStrength(newPassword) == false) {
                 passwordErrorMessage.add("Password must be from 6 to 20 characters containing lowercase, uppercase letters and numbers.");
+                logger.warn("Unable to update user. Password is out of allowed length or too weak.");
                 return result;
             }
             user.setPasswordHash(CryptService.encrypt(newPassword));
@@ -133,6 +134,7 @@ public class UserServiceImpl implements UserService {
             if (!fName.isEmpty()) {
                 if (checkNameValidity(fName) == false || checkNameLength(fName) == false) {
                     nameErrorMessage.add("First name must be from 1 to 128 characters containing only letters");
+                    logger.warn("Unable to update user. First name is out of allowed length or contains illegal characters.");
                     return result;
                 }
                 user.setFName(fName);
@@ -144,6 +146,7 @@ public class UserServiceImpl implements UserService {
             if (!mName.isEmpty()) {
                 if (checkNameValidity(mName) == false || checkNameLength(mName) == false) {
                     nameErrorMessage.add("Middle name must be from 1 to 128 characters containing only letters");
+                    logger.warn("Unable to update user. Middle name is out of allowed length or contains illegal characters.");
                     return result;
                 }
                 user.setMName(mName);
@@ -155,6 +158,7 @@ public class UserServiceImpl implements UserService {
             if (!lName.isEmpty()) {
                 if (checkNameValidity(lName) == false || checkNameLength(lName) == false) {
                     nameErrorMessage.add(("Last name must be from 1 to 128 characters containing only letters"));
+                    logger.warn("Unable to update user. Last name is out of allowed length or contains illegal characters.");
                     return result;
                 }
                 user.setLName(lName);
@@ -162,13 +166,12 @@ public class UserServiceImpl implements UserService {
                 user.setLName(lName);
             }
         }
-       /* if (nameErrorMessage.size() > 0) {
-            return result;
-        }*/
-        if (userPicURL!=null) {
+
+        if (userPicURL != null) {
             if (!userPicURL.isEmpty()) {
                 if (checkURLIsImage(userPicURL) == false) {
                     userPicErrorMessage.add("User picture url must be valid and lead to picture with one of these extensions: *.jpg, *.jpeg, *.bmp, *.gif, *.png");
+                    logger.warn("Unable to update user. Entered userpic url is invalid, or leads to non-picture file.");
                     return result;
                 }
                 user.setUserPicURL(userPicURL);
@@ -179,12 +182,6 @@ public class UserServiceImpl implements UserService {
         userDao.updateUser(user);
         return result;
     }
-
-    public Object[] updateUser(MultiValueMap<String, String> incParam) {
-        Object[] result = new Object[3];
-        return null;
-    }
-
 
     private boolean checkEmailValidity(String email) {
         return EmailValidator.getInstance().isValid(email);
@@ -213,14 +210,12 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean checkUserPicURL(String url) {
-        return checkURLValidity(url)&&checkURLIsImage(url);
+        return checkURLValidity(url) && checkURLIsImage(url);
     }
 
     private boolean checkURLValidity(String url) {
         try {
             HttpURLConnection.setFollowRedirects(false);
-            // note : you may also need
-            //        HttpURLConnection.setInstanceFollowRedirects(false)
             HttpURLConnection con =
                     (HttpURLConnection) new URL(url).openConnection();
             con.setRequestMethod("HEAD");
@@ -232,11 +227,11 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean checkURLIsImage(String url) {
-        boolean result=false;
+        boolean result = false;
         String[] extensions = {".jpg", ".jpeg", ".png", ".gif", ".png"};
         for (int i = 0; i < extensions.length; i++) {
             if (url.endsWith(extensions[i])) {
-                result=true;
+                result = true;
             }
         }
         return result;

@@ -17,16 +17,17 @@ public class LoginController {
         this.userService = userService;
     }
 
-    private static Logger logger = Logger.getLogger(LoginController.class);
+    private static Logger fileLogger = Logger.getLogger("file");
 
-    @RequestMapping(value="/login", method= RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
-        logger.info("User logged in");
+        fileLogger.info("Someone requests login page");
         return "loginPage";
     }
 
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
     public String dashboard() {
+        fileLogger.info("User " + userService.getActiveUser().getEmail() + " logged in.");
         return "dashboard";
     }
 }

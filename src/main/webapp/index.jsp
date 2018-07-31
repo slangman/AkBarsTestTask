@@ -7,11 +7,11 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <head>
+<head>
     <title>Ak Bars Test Task</title>
     <meta http-equiv="refresh" content="1; URL=${pageContext.request.contextPath}/login">
-  </head>
-  <body>
-  Redirecting...
-  </body>
+</head>
+<body>
+Redirecting...
+</body>
 </html>

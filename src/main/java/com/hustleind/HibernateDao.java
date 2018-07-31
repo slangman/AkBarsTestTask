@@ -20,27 +20,29 @@ public class HibernateDao implements UserDao {
     private SessionFactory factory;
 
     @Autowired
-    public HibernateDao(SessionFactory factory){
-        this.factory=factory;
+    public HibernateDao(SessionFactory factory) {
+        this.factory = factory;
     }
 
     @Override
     public User getUserById(int id) {
         if (id < 0) {
-            logger.error("Unable to return user with id = " +id);
+            logger.error("Unable to return user with id = " + id);
             return null;
         }
         Session session = factory.getCurrentSession();
+        logger.info("Attempt to get user with id " + id);
         return session.get(User.class, id);
     }
 
     @Override
     public User getUserByEmail(String email) {
-        if (email==null || email.isEmpty()) {
+        if (email == null || email.isEmpty()) {
             logger.error("Unable to return user by email: email parameter is null or empty");
             return null;
         }
         Session session = factory.getCurrentSession();
+        logger.info("Attempt to get user with email " + email);
         return (User) session.createQuery("FROM User user WHERE user.email = :email").
                 setParameter("email", email).
                 uniqueResult();
@@ -54,27 +56,29 @@ public class HibernateDao implements UserDao {
 
     @Override
     public void addUser(User user) {
-        if (user==null) {
+        if (user == null) {
             logger.error("Unable to add user. User parameter is null");
             return;
         }
         Session session = factory.getCurrentSession();
         session.save(user);
+        logger.info("User with email " + user.getEmail() + " successfully added.");
     }
 
     @Override
     public void updateUser(User user) {
-        if (user==null) {
+        if (user == null) {
             logger.error("Unable to update user. User parameter is null");
             return;
         }
         Session session = factory.getCurrentSession();
         session.update(user);
+        logger.info("User with id " + user.getId() + " successfully updated.");
     }
 
     @Override
     public void deactivateUser(User user) {
-        if (user==null) {
+        if (user == null) {
             logger.error("Unable to deativate user. User parameter is null");
             return;
         }
@@ -84,6 +88,7 @@ public class HibernateDao implements UserDao {
         Root<User> root = criteria.from(User.class);
         criteria.set(root.get("enabled"), 0).
                 where(builder.equal(root.get("email"), user.getEmail()));
+        logger.info("User with id " + user.getId() + " successfully deactivated.");
 
     }
 
@@ -96,5 +101,6 @@ public class HibernateDao implements UserDao {
         Session session = factory.getCurrentSession();
         User user = getUserById(id);
         session.delete(user);
+        logger.info("User with id " + id + " successfully deleted");
     }
 }
